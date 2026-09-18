@@ -1,0 +1,15 @@
+<!DOCTYPE html><html dir="rtl" lang="ar"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Thunder Delivery</title><link rel="stylesheet" href="/style.css">
+</head><body>
+<div class="hdr"><img src="/logo.svg" width="90" height="90" alt="Thunder"><h1 class="brand">THUNDER</h1><div class="brand-sub">DELIVERY</div><div class="usr">مرحبا <b id="un" style="color:#FFD700">-</b> • <span id="ph">-</span></div></div>
+<div class="container fi"><div class="card"><h3>📍 طلب توصيل جديد</h3><p>اطلب توصيل أي شيء الآن</p><button class="btn" id="ob">اطلب الآن</button></div>
+<div class="card"><h3>📋 طلباتي</h3><p>عرض سجل الطلبات</p><button class="btn dark" id="lb">عرض الطلبات</button><div id="ol" style="margin-top:12px"></div></div>
+<div class="card"><h3>💰 محفظتي</h3><p>الرصيد: <b id="bal" style="color:#FFD700">-</b></p><button class="btn dark" id="wb">تحديث</button></div>
+<button class="btn red" id="lgb">تسجيل الخروج</button></div>
+<script>
+var T=localStorage.getItem("token");var U=localStorage.getItem("user");if(!T||!U){location.href="/enter.html"}else{var u=JSON.parse(U);document.getElementById("un").textContent=u.full_name;document.getElementById("ph").textContent=u.phone}
+document.getElementById("lb").onclick=function(){fetch("/api/orders",{headers:{Authorization:"Bearer "+T}}).then(function(r){return r.json()}).then(function(d){var l=document.getElementById("ol");if(!d.length){l.innerHTML="<p style=\"color:#666;text-align:center\">لا توجد طلبات</p>"}else{l.innerHTML=d.map(function(o){return"<div style=\"padding:10px;border-top:1px solid #222;color:#eee\"><b style=\"color:#FFD700\">"+o.type_name+"</b> - <span class=\"status "+o.status+"\">"+o.status+"</span><br><small style=\"color:#666\">"+o.estimated_price+" "+o.currency+"</small></div>"}).join("")}})}
+document.getElementById("wb").onclick=function(){location.href="/wallet.html"}
+document.getElementById("ob").onclick=function(){location.href="/order.html"}
+document.getElementById("lgb").onclick=function(){localStorage.clear();location.href="/enter.html"}
+</script></body></html>
+</script></body></html>

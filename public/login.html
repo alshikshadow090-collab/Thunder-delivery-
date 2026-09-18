@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar"><head><meta charset="UTF-8"><title>Login</title></head><body style="font-family:sans-serif;padding:30px;max-width:400px;margin:auto;background:#eee">
+<h1 style="color:#1e3a8a">Thunder Delivery</h1>
+<input id="p" value="+249912345678" style="width:100%;padding:12px;margin:8px 0;font-size:16px">
+<input id="w" type="password" value="test1234" style="width:100%;padding:12px;margin:8px 0;font-size:16px">
+<button onclick="L()" style="width:100%;padding:14px;background:#1e3a8a;color:#fff;border:0;border-radius:8px;font-size:16px">دخول</button>
+<div id="m" style="margin-top:12px;text-align:center"></div>
+<script>
+function L(){fetch("/api/auth/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({phone:document.getElementById("p").value,password:document.getElementById("w").value})}).then(r=>r.json()).then(d=>{if(d.token){localStorage.setItem("token",d.token);localStorage.setItem("user",JSON.stringify(d.user));document.getElementById("m").innerHTML="OK "+d.user.full_name;setTimeout(()=>location.href="/app.html",1000)}else{document.getElementById("m").innerHTML="Error: "+d.error}})}
+</script></body></html>
