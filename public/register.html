@@ -1,0 +1,155 @@
+<!DOCTYPE html><html dir="rtl" lang="ar"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>تسجيل جديد - Thunder</title><link rel="stylesheet" href="/style.css"><link rel="manifest" href="/manifest.json"><meta name="theme-color" content="#000000">
+<style>
+.tabs{display:flex;gap:10px;margin-bottom:20px}
+.tab{flex:1;padding:16px 8px;background:#141414;border:1px solid #222;border-radius:14px;text-align:center;cursor:pointer;transition:.15s}
+.tab.active{background:#1e1e1e;border-color:#FFD700}
+.tab .ic{font-size:22px;display:block;margin-bottom:6px}
+.tab span{font-size:13px;color:#888;font-weight:700}
+.tab.active span{color:#FFD700}
+.fld{width:100%;padding:14px;background:#0a0a0a;border:2px solid #222;border-radius:12px;color:#fff;font-size:15px;margin-bottom:12px;font-family:inherit;outline:none;box-sizing:border-box}
+.fld:focus{border-color:#FFD700}
+.row2{display:flex;gap:10px}
+.cc{width:90px;padding:14px 6px;background:#0a0a0a;border:2px solid #222;border-radius:12px;color:#FFD700;font-size:14px;text-align:center;flex-shrink:0}
+.veh{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.veh div{padding:10px 14px;background:#141414;border:1px solid #222;border-radius:10px;font-size:13px;color:#888;cursor:pointer}
+.veh div.active{border-color:#FFD700;color:#FFD700}
+.section-hide{display:none}
+.lbl{color:#888;font-size:12px;margin:4px 0 10px;font-weight:700}
+</style>
+</head><body>
+<div class="hdr"><img src="/logo.svg" width="90" height="90" alt="Thunder"><h1 class="brand">THUNDER</h1><div class="brand-sub">DELIVERY</div></div>
+<div class="container fi" style="margin-top:20px">
+
+<div class="tabs">
+  <div class="tab" data-role="vendor" onclick="setRole('vendor')"><span class="ic">🏪</span><span>متجر</span></div>
+  <div class="tab" data-role="driver" onclick="setRole('driver')"><span class="ic">🏍️</span><span>مندوب</span></div>
+  <div class="tab active" data-role="customer" onclick="setRole('customer')"><span class="ic">👤</span><span>عميل</span></div>
+</div>
+
+<div class="card">
+
+  <!-- Vendor-only fields -->
+  <div id="f-owner_name" class="section-hide">
+    <div class="lbl">اسم المالك</div>
+    <input class="fld" id="owner_name" placeholder="اسم المالك">
+  </div>
+  <div id="f-business_name" class="section-hide">
+    <div class="lbl">اسم المتجر</div>
+    <input class="fld" id="business_name" placeholder="اسم المتجر">
+  </div>
+
+  <!-- Customer/Driver full name -->
+  <div id="f-full_name">
+    <div class="lbl">الاسم الكامل</div>
+    <input class="fld" id="full_name" placeholder="الاسم الكامل">
+  </div>
+
+  <div class="lbl">البريد الإلكتروني (اختياري)</div>
+  <input class="fld" id="email" type="email" placeholder="البريد الإلكتروني">
+
+  <div class="lbl">رقم الهاتف</div>
+  <div class="row2" style="margin-bottom:12px">
+    <div class="cc">🇸🇩 +249</div>
+    <input class="fld" id="phone" style="margin-bottom:0" placeholder="9XXXXXXXX">
+  </div>
+
+  <div class="lbl">كلمة المرور</div>
+  <input class="fld" id="password" type="password" placeholder="كلمة المرور">
+
+  <div class="lbl">تأكيد كلمة المرور</div>
+  <input class="fld" id="password2" type="password" placeholder="تأكيد كلمة المرور">
+
+  <!-- Driver-only: vehicle type -->
+  <div id="f-vehicle" class="section-hide">
+    <div class="lbl">نوع المركبة</div>
+    <div class="veh">
+      <div data-v="دراجة نارية" onclick="setVeh(this)">دراجة نارية</div>
+      <div data-v="ركشة" onclick="setVeh(this)">ركشة</div>
+      <div data-v="اقتصادية" onclick="setVeh(this)">اقتصادية</div>
+      <div data-v="عائلية" onclick="setVeh(this)">عائلية</div>
+    </div>
+  </div>
+
+  <button class="btn" onclick="S()">تسجيل جديد</button>
+  <div id="m" style="padding:12px;border-radius:10px;margin-top:12px;text-align:center;font-size:13px;display:none"></div>
+</div>
+
+<div style="text-align:center;margin-top:16px;color:#888;font-size:13px">
+  لديك حساب بالفعل؟ <a href="/enter.html" style="color:#FFD700;font-weight:700;text-decoration:none">تسجيل الدخول</a>
+</div>
+
+</div>
+
+<script>
+var role = "customer";
+var vehicle = "دراجة نارية";
+
+function setRole(r){
+  role = r;
+  document.querySelectorAll(".tab").forEach(function(t){t.classList.toggle("active", t.dataset.role===r)});
+  document.getElementById("f-owner_name").classList.toggle("section-hide", r!=="vendor");
+  document.getElementById("f-business_name").classList.toggle("section-hide", r!=="vendor");
+  document.getElementById("f-full_name").classList.toggle("section-hide", r==="vendor");
+  document.getElementById("f-vehicle").classList.toggle("section-hide", r!=="driver");
+}
+
+function setVeh(el){
+  vehicle = el.dataset.v;
+  document.querySelectorAll(".veh div").forEach(function(d){d.classList.remove("active")});
+  el.classList.add("active");
+}
+
+function showMsg(ok, text){
+  var m = document.getElementById("m");
+  m.style.display = "block";
+  if(ok){ m.style.background="#065f46"; m.style.color="#6ee7b7"; }
+  else { m.style.background="#7f1d1d"; m.style.color="#fca5a5"; }
+  m.textContent = text;
+}
+
+async function S(){
+  var btn = document.querySelector(".btn");
+  var phone = "+249" + document.getElementById("phone").value.trim();
+  var password = document.getElementById("password").value;
+  var password2 = document.getElementById("password2").value;
+  var email = document.getElementById("email").value.trim();
+
+  if(password.length < 6){ showMsg(false, "كلمة المرور لازم تكون 6 أحرف على الأقل"); return; }
+  if(password !== password2){ showMsg(false, "كلمتا المرور غير متطابقتين"); return; }
+
+  var url, body;
+  if(role === "customer"){
+    url = "/api/auth/register";
+    body = { full_name: document.getElementById("full_name").value.trim(), phone: phone, password: password, email: email || undefined };
+  } else if(role === "driver"){
+    url = "/api/driver/register";
+    body = { full_name: document.getElementById("full_name").value.trim(), phone: phone, password: password, vehicle_type: vehicle };
+  } else {
+    url = "/api/vendor/register";
+    body = { owner_name: document.getElementById("owner_name").value.trim(), business_name: document.getElementById("business_name").value.trim(), phone: phone, password: password, email: email || undefined };
+  }
+
+  btn.disabled = true; btn.textContent = "جاري التسجيل...";
+  try{
+    var r = await fetch(url, { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(body) });
+    var d = await r.json();
+    if(!r.ok) throw new Error(d.error || "خطأ في التسجيل");
+    var token = d.token;
+    var entity = d.user || d.driver || d.vendor;
+    if(role === "customer"){ localStorage.setItem("token", token); localStorage.setItem("user", JSON.stringify(entity)); }
+    if(role === "driver"){ localStorage.setItem("driverToken", token); localStorage.setItem("driver", JSON.stringify(entity)); }
+    if(role === "vendor"){ localStorage.setItem("vendorToken", token); localStorage.setItem("vendor", JSON.stringify(entity)); }
+    showMsg(true, "✅ تم التسجيل بنجاح");
+    setTimeout(function(){
+      if(role === "customer") location.href = "/app.html";
+      else if(role === "driver") location.href = "/driver.html";
+      else location.href = "/enter.html";
+    }, 900);
+  }catch(e){
+    showMsg(false, "❌ " + e.message);
+  }finally{
+    btn.disabled = false; btn.textContent = "تسجيل جديد";
+  }
+}
+</script>
+</body></html>
