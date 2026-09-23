@@ -14,7 +14,7 @@ app.use(cors({ origin: process.env.CORS_ORIGIN || "*" }));
 app.use(express.json({ limit: "1mb" }));
 app.use(express.static("public"));
 
-app.get("/", (_req, res) => res.send("<h1>Thunder Delivery API v3.0</h1>"));
+app.get("/", (_req, res) => res.redirect("/enter.html"));
 
 app.get("/api/health", async (_req, res) => {
   try {

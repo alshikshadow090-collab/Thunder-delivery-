@@ -1,0 +1,9 @@
+const express=require("express");const bcrypt=require("bcryptjs");const pool=require("../config/db");const {signVendorToken}=require("../utils/jwt");const {authLimiter}=require("../middleware/rateLimiter");const vendorAuth=require("../middleware/vendorAuth");const router=express.Router();
+
+router.post("/register",authLimiter,async(req,res,next)=>{const{owner_name,business_name,phone,email,password}=req.body;if(!owner_name||!business_name||!phone||!password||password.length<6)return res.status(400).json({error:"بيانات ناقصة"});try{const hash=await bcrypt.hash(password,12);const{rows}=await pool.query("INSERT INTO vendors(owner_name,business_name,phone,email,password_hash) VALUES($1,$2,$3,$4,$5) RETURNING vendor_id,owner_name,business_name,phone,email",[owner_name,business_name,phone,email||null,hash]);res.status(201).json({vendor:rows[0],token:signVendorToken(rows[0])})}catch(e){if(e.code==="23505")return res.status(409).json({error:"متجر مسجل بالفعل"});next(e)}});
+
+router.post("/login",authLimiter,async(req,res,next)=>{try{const{phone,password}=req.body;if(!phone||!password)return res.status(400).json({error:"بيانات ناقصة"});const{rows}=await pool.query("SELECT * FROM vendors WHERE phone=$1 AND deleted_at IS NULL",[phone]);const v=rows[0];if(!v||!v.password_hash||!(await bcrypt.compare(password,v.password_hash)))return res.status(401).json({error:"بيانات غير صحيحة"});res.json({vendor:{vendor_id:v.vendor_id,owner_name:v.owner_name,business_name:v.business_name,phone:v.phone,email:v.email,is_open:v.is_open},token:signVendorToken(v)})}catch(e){next(e)}});
+
+router.get("/me",vendorAuth,async(req,res,next)=>{try{const{rows}=await pool.query("SELECT vendor_id,owner_name,business_name,phone,email,is_open,status FROM vendors WHERE vendor_id=$1",[req.auth.sub]);if(!rows[0])return res.status(404).json({error:"غير موجود"});res.json(rows[0])}catch(e){next(e)}});
+
+module.exports=router;
