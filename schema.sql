@@ -213,3 +213,10 @@ CREATE TABLE notifications (
 );
 
 CREATE INDEX idx_notifications_recipient ON notifications(recipient_id, recipient_type);
+
+-- تحديث: هذه الأعمدة تمت إضافتها لاحقاً على قاعدة البيانات الحية
+ALTER TABLE vendors
+  ADD COLUMN IF NOT EXISTS owner_name    TEXT,
+  ADD COLUMN IF NOT EXISTS phone         TEXT,
+  ADD COLUMN IF NOT EXISTS email         TEXT,
+  ADD COLUMN IF NOT EXISTS password_hash TEXT;

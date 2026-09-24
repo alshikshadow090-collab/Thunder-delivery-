@@ -1,0 +1,68 @@
+                                                Table "public.ve
+ndors"
+       Column       |            Type             | Collation | 
+Nullable |                  Default                   
+--------------------+-----------------------------+-----------+-
+---------+--------------------------------------------
+ vendor_id          | integer                     |           | 
+not null | nextval('vendors_vendor_id_seq'::regclass)
+ business_name      | text                        |           | 
+not null | 
+ category_id        | integer                     |           | 
+         | 
+ logo_url           | text                        |           | 
+         | 
+ cover_image_url    | text                        |           | 
+         | 
+ address_text       | text                        |           | 
+         | 
+ latitude           | numeric(10,7)               |           | 
+         | 
+ longitude          | numeric(10,7)               |           | 
+         | 
+ commission_percent | numeric(5,2)                |           | 
+         | 10.0
+ rating_avg         | numeric(3,2)                |           | 
+         | 5.0
+ is_open            | boolean                     |           | 
+         | true
+ min_order_value    | numeric(12,2)               |           | 
+         | 0
+ delivery_fee       | numeric(12,2)               |           | 
+         | 0
+ avg_prep_minutes   | integer                     |           | 
+         | 20
+ status             | text                        |           | 
+         | 'active'::text
+ deleted_at         | timestamp without time zone |           | 
+         | 
+ created_at         | timestamp without time zone |           | 
+         | now()
+ owner_name         | text                        |           | 
+         | 
+ phone              | text                        |           | 
+         | 
+ email              | text                        |           | 
+         | 
+ password_hash      | text                        |           | 
+         | 
+Indexes:
+    "vendors_pkey" PRIMARY KEY, btree (vendor_id)
+    "vendors_phone_key" UNIQUE CONSTRAINT, btree (phone)
+Foreign-key constraints:
+    "fk_vendors_category" FOREIGN KEY (category_id) REFERENCES v
+endor_categories(category_id)
+Referenced by:
+    TABLE "menu_categories" CONSTRAINT "menu_categories_vendor_i
+d_fkey" FOREIGN KEY (vendor_id) REFERENCES vendors(vendor_id) ON
+ DELETE CASCADE
+    TABLE "menu_items" CONSTRAINT "menu_items_vendor_id_fkey" FO
+REIGN KEY (vendor_id) REFERENCES vendors(vendor_id) ON DELETE CA
+SCADE
+    TABLE "order_messages" CONSTRAINT "order_messages_vendor_id_
+fkey" FOREIGN KEY (vendor_id) REFERENCES vendors(vendor_id)
+    TABLE "orders" CONSTRAINT "orders_vendor_id_fkey" FOREIGN KE
+Y (vendor_id) REFERENCES vendors(vendor_id)
+    TABLE "vendor_earnings" CONSTRAINT "vendor_earnings_vendor_i
+d_fkey" FOREIGN KEY (vendor_id) REFERENCES vendors(vendor_id)
+    TABLE "vendor_payout_requests" CONSTRAINT "vendor_payout_req
